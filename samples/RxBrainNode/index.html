@@ -1,0 +1,153 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="../../dist/brain.js"></script>
+        <script src="./RxFramework.js"></script>
+
+        <script>
+
+            const clickToRandDate = () => {
+
+                const inputNum = document.getElementById('inputNum');
+                const value = inputNum.value.trim();
+                if(isNaN(Number(value))) return alert('숫자가 아닙니다.');
+
+                data = [];
+                data1 = [];
+                for(let i = 0; i < Number(value); i++){
+                    const c = category[(Math.ceil(Math.random() * (category.length - 1)))];
+                    const output = {};
+                    output[String(c)] = 1;
+                    data.push({
+                        input : {r: Math.random(), g: Math.random(), b: Math.random()},
+                        output,
+                    });
+                    data1.push({
+                        input : {r: Math.random(), g: Math.random(), b: Math.random()},
+                        output,
+                    });
+                }
+
+                console.log('data');
+                console.log(data);
+                console.log('data1');
+                console.log(data1);
+                alert('data : ' + data.length + '개, data1 : ' + data1.length + '개의 데이터가 준비되었습니다.');
+
+                
+            };
+            const clickToLeaning = () => {
+                console.log(' - 모델 샘플 -');
+                console.log(netNode.getModels());
+                netNode.addData(netNode.getModels()[0], data);
+                netNode.addData(netNode.getModels()[1], data1);
+            };
+            const clickToUseNetwork = () => {
+                const input = {r: Math.random(), g: Math.random(), b: Math.random()};
+                const result = netNode.run(netNode.getModels()[0], input);
+                console.log(result);
+            };
+
+
+
+            let netNode;
+            const category = [
+                'black', 'red', 'white', 'blue', 'gold', 'green'
+            ];
+            let data = [];
+            let data1 = [];
+            window.onload = function(){
+
+
+                // 데이터 모델 설정
+                const emotions = {
+                    networks : [
+                        {
+                            model : 'gladness',
+                            version : '0.1',
+                        },
+                        {
+                            model : 'aggro',
+                            version : '0.1',
+                        },
+                        {
+                            model : 'dolor',
+                            version : '0.1',
+                        },
+                        {
+                            model : 'joy',
+                            version : '0.1',
+                        },
+                    ],
+                };
+                setTimeout(function(){
+                    netNode = new RxFramework.RxBrainNodeC(emotions);
+                }, 1000);
+
+            }
+        </script>
+
+    </head>
+    <body>
+
+        <div>
+            <h1> Rx Brain Node</h1>
+            <p> * 해당 연도 말까지 테스트 가능합니다.</p>
+
+            <div>
+                <span>
+                    <span>랜덤 데이터 학습 개수 설정</span>&nbsp;
+                    <span><input type='text' id="inputNum" value="1000" /></span>
+                </span>
+            </div>
+    
+            <br />
+
+            <div>
+                <button onclick="clickToRandDate()">랜덤 데이터 뽑기</button>
+                <button onclick="clickToLeaning()">데이터 학습하기</button>
+                <button onclick="clickToUseNetwork()">사용하기</button>
+                <button onclick="window.location.reload()">새로고침</button>
+            </div>
+
+
+            <div>
+                
+                <p> 
+                    Rx Brain Node는 brain.js (<a href='https://brain.js.org/'>https://brain.js.org/</a>)의 동적 사용에 관한 라이브러리 입니다.    
+                    [ 클라우드 Rx (<a href='https://rxapis.com'>https://rxapis.com</a>) ]에서 제공합니다.
+                </p>
+                <h3>특징</h3>
+                <p> * brain.js의 Neural Networks의 동적사용</p>
+                <p> * 데이터의 개수와 상관없이 빠른 사용 가능</p>
+                <p> * 모델별 사용이 용이</p>
+
+                <h3>사용법</h3>
+                <h3>Rx Brain Node 설명</h3>
+                <p> new 생성자를 통해 초기 모델 전달</p>
+                <p> function getModels : 준비되어 있는 모델 명 호출 </p>
+                <p> function addData : (모델 명, 학습 데이터) 준비되어 있는 모델에 학습시킬 데이터 넣기 </p>
+                <p> * addData는 기존에 있는 데이터 + 다음 호출 때 부르는 데이터로 더해서 학습함 </p>
+                <p> * 학습에 따르는 기본값들은 동적으로 자동 설정됨. </p>
+                <p> function run : (모델 명, input 데이터) 값을 통한 수행값 리턴</p>
+                <p> * run은 해당 노드가 준비되어 있을 때 값 리턴, 아직 준비중이면 undefined 리턴</p>
+            
+
+                <h3>Rx Brain Node가 지원하는 brain.js Neural Network</h3>
+
+                <p> brain.NeuralNetwork : O </p>
+                <p> brain.recurrent.RNN : X </p>
+                <p> brain.recurrent.GRU : X </p>
+                <p> brain.recurrent.LSTM : X </p>
+                <p> brain.recurrent.RNNTimeStep : X </p>
+                <p> brain.recurrent.GRUTimeStep : X </p>
+                <p> brain.recurrent.LSTMTimeStep : X </p>
+                
+            </div>
+        </div>
+
+
+
+
+    </body>
+</html>

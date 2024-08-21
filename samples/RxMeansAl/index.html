@@ -1,0 +1,240 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <script src="./RxFramework.js"></script>
+        <style>
+            #targetDom {
+                position: absolute;
+                top : 50%;
+                left : 50%;
+                transform: translate(-50%, -50%);
+                width : 500px;
+                height : 500px;
+                border : 1px solid red;
+                opacity: .5;
+            }
+            span{
+                opacity: .5;
+            }
+            .point {
+                position: absolute;
+                outline: 5px solid red;
+                transition: all 1s;
+            }
+            .explain {
+                background-color: rgba(0, 0, 0, 0.2);
+                padding: 20px;
+            }
+        </style>
+
+        <script>
+
+
+            const colors = [
+
+                '#7C93C3', '#55679C', '#1E2A5E',
+                '#CD5C08', '#0D7C66', '#C0C78C',
+                '#B99470', '#7A1CAC', '#FF8A8A',
+            ];
+
+
+            let pointEles = [];
+            const SampleDraw = () => {
+                for(let i  = 0; i < points.length; i++){
+                    const pointEle = document.createElement('span');
+                    pointEle.classList.add('point');
+                    pointEle.style.top = points[i]['points'][1] + 'px';
+                    pointEle.style.left = points[i]['points'][0] + 'px';
+                    document.body.appendChild(pointEle);
+
+                    pointEle.setAttribute('x', points[i]['points'][0]);
+                    pointEle.setAttribute('y', points[i]['points'][1]);
+                    pointEles.push(pointEle);
+                }
+            }
+            const SampleMover = (cluster) => {
+
+                const Mover = (ele, coordinate, color) => {
+                    setTimeout(() => {
+                        ele.style.top = coordinate[1] + 'px';
+                        ele.style.left = coordinate[0] + 'px';
+                        ele.style.outline = `5px solid ${color}`;
+                    }, 0);
+                }
+
+                const keys = Object.keys(cluster);
+                for(let i = 0; i < keys.length; i++){
+                    const each = cluster[keys[i]];
+
+                    for(let j = 0; j < each.length; j++){
+                        const data = each[j]['data']['points'];
+                        const coord = each[j]['cent']['points'];
+
+                        for(let k = 0; k < pointEles.length; k++){
+                            const x = pointEles[k].getAttribute('x');
+                            const y = pointEles[k].getAttribute('y');
+                            if(String(x) === String(data[0])){
+                                if(String(y) === String(data[1])){
+                                    Mover(pointEles[k], coord, colors[i]);
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+
+            const SampleRange = () => {
+
+                for(let i = 0; i < centroids.length; i++){
+                    const coord = centroids[i]['points'];
+
+                    const span = document.createElement('SPAN');
+                    span.style.position = 'absolute';
+                    span.style.top = (coord[1] - 50) + 'px';
+                    span.style.left = (coord[0] - 50) + 'px';
+                    span.style.outline = `5px solid ${colors[i]}`;
+                    span.style.width = '100px';
+                    span.style.height = '100px';
+
+                    span.innerText = centroids[i]['label'];
+                    document.body.appendChild(span);
+                }
+                
+
+            }
+
+
+            const clickToRandDate = () => {
+                const inputNum = document.getElementById('inputNum');
+                const value = inputNum.value.trim();
+                if(isNaN(Number(value))) return alert('숫자가 아닙니다.');
+
+                for(let i = 0; i < Number(value); i++){
+                    const x = Math.round(Math.random() * document.body.offsetWidth);
+                    const y = Math.round(Math.random() * document.body.offsetHeight);
+                    points.push({ points : [x, y] });
+                }
+
+                SampleDraw();
+
+                console.log(' ----- 데이터 ----- ');
+                console.log(points);
+
+            }
+
+            const clickToClustering = () => {
+
+                rx = new RxFramework.RxMeansAL();
+                rx.SetDistanceWay(true);    // true : 유클리드 거리 측정, false : 멘해튼 거리 측정 - default : true
+                rx.SetStaticCentroids(centroids);
+                rx.SetPoints(points);
+                const cluster = rx.ExecRxCluster();
+
+                SampleMover(cluster);
+
+                console.log(cluster);
+            }
+
+            const clickToClear = () => {
+
+                points = [];
+                rx.Clear();
+
+                while(pointEles.length > 0){
+                    pointEles.shift().remove();
+                }
+
+            }
+
+
+            let centroids;
+            let points;
+            let rx;
+            window.onload = function(){
+
+                
+
+
+                // const target = document.body;
+                const target = document.getElementById('targetDom');
+                const targetRect = target.getBoundingClientRect();
+                const targetMinX = targetRect.x;
+                const targetMaxX = targetRect.x + targetRect.width;
+                const targetMinY = targetRect.y;
+                const targetMaxY = targetRect.y + targetRect.height;
+                const targetMiddle = [ targetMinX + (targetRect.width / 2), targetMinY + (targetRect.height / 2)];
+
+                centroids = [
+                    { points : [targetMinX, targetMinY] , label : 'topLeft'},
+                    { points : [targetMiddle[0], targetMinY], label : 'topMiddle'}, 
+                    { points : [targetMaxX, targetMinY], label : 'topRight'}, 
+
+                    { points : [targetMinX, targetMiddle[1]], label : 'middleLeft' }, 
+                    { points : [targetMiddle[0], targetMiddle[1]], label : 'middleMiddle' }, 
+                    { points : [targetMaxX, targetMiddle[1]], label : 'middleRight' }, 
+
+                    { points : [targetMinX, targetMaxY], label : 'bottomLeft' }, 
+                    { points : [targetMiddle[0], targetMaxY], label : 'bottomMiddle' }, 
+                    { points : [targetMaxX, targetMaxY], label : 'bottomRight' }, 
+                ];
+
+                points = [
+                    { points : [ 1, 1 ] },
+                    { points : [ 1000, 1000 ] },
+                ];
+
+                SampleRange();
+
+
+            }
+
+        </script>
+
+    </head>
+    <body>
+
+        <div id="targetDom">
+    
+            <br />
+
+
+
+        </div>
+
+
+        <div class="explain">
+            <h1> Rx Means Algorithm</h1>
+            <p> * 해당 연도 말까지 테스트 가능합니다.</p>
+    
+            <div>
+                <span>
+                    <span>포인트 생성 개수 설정</span>&nbsp;
+                    <span><input type='text' id="inputNum" value="100" /></span>
+                </span>
+            </div>
+    
+    
+            <div>
+                <button onclick="clickToRandDate()">랜덤 데이터 뽑기</button>
+                <button onclick="clickToClustering()">분류하기</button>
+                <button onclick="clickToClear()">Clear</button>
+            </div>
+    
+            <div>
+                <p> 
+                    [ 클라우드 Rx (<a href='https://rxapis.com'>https://rxapis.com</a>) ]에서 제공합니다.
+                </p>
+                <h3>특징</h3>
+                <p> * 다중 차원 좌표값 클러스터링</p>
+                <p> * 유클리드 거리 측정법 사용</p>
+                <p> * 라벨별 사용 용이</p>
+            </div>
+        </div>
+
+
+
+
+
+    </body>
+</html>
