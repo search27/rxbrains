@@ -1,0 +1,345 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!-- <script src="./RxFramework.js"></script> -->
+        <script src="../../dist/brain.js"></script>
+        <script src="./etc.js"></script>
+        <script src="./RxPersonalityIndicator.js"></script>
+        <script src="./RxState.js"></script>
+        <script src="./RxBrainNode.js"></script>
+        <script src="./RxBrainNodeC.js"></script>
+        
+        <script src="./RxRockPaperScissors.js"></script>
+        <style>
+            #targetDom {
+                position: absolute;
+                top : 50%;
+                left : 50%;
+                transform: translate(-50%, -50%);
+                width : 500px;
+                height : 500px;
+                border : 1px solid #333;
+                padding : 5px;
+                opacity: .5;
+            }
+            .explain {
+                background-color: rgba(0, 0, 0, 0.2);
+                padding: 20px;
+            }
+
+
+            #targetDom > div {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 100%;
+            }
+            #targetDom > div > div {
+
+            }
+            #targetDom > div > div:nth-child(1){
+                flex : 1;
+                display : flex;
+            }
+            #targetDom > div > div:nth-child(1) > div {
+                flex : 1;
+                display: flex;
+                flex-direction: column;
+            }
+            #targetDom > div > div:nth-child(1) > div:nth-child(1){
+                border-right: 1px solid #ccc;
+            }
+            #targetDom > div > div:nth-child(1) > div > div {
+                text-align: center;
+                font-weight: bolder;
+                padding : 10px;
+            }
+            #targetDom > div > div:nth-child(1) > div > div:nth-child(1){
+                font-size: 18px;
+                
+            }
+            #targetDom > div > div:nth-child(1) > div > div:nth-child(2){
+                flex : 1;
+                font-size: 53px;
+                line-height: 333px;
+            }
+            #targetDom > div > div:nth-child(1) > div > div:nth-child(3){}
+
+
+
+            #targetDom > div > div:nth-child(2){
+                height: 50px;
+                text-align: center;
+            }
+            #targetDom > div > div:nth-child(2) > button{
+                min-width: 100px;
+                height: 100%;
+                padding : 10px;
+                margin-right: 5px;
+            }
+
+            .ask {
+                border : 1px solid #ccc;
+                border-radius: 10px;
+                position: absolute;
+                top : 50%;
+                left : 50%;
+                transform: translate(-50%, -50%);
+                width: 550px;
+                background: rgba(255, 255, 255, 1);
+                padding : 30px;
+                
+            }
+            .ask h2 {
+                text-align: center;
+
+            }
+            .grd-points {
+                text-align: center;
+            }
+            .grd-points button{
+                border : 0;
+                border-radius: 50%;
+                text-align: center;
+                width: 100px;
+                height: 100px;
+                line-height: 100px;
+                background-color: rgb(42, 78, 255);
+                box-shadow: 1px 2px 3px #333;
+                font-size: 22px;
+                color : white;
+                opacity: 0.9;
+                cursor: pointer;
+            }
+            .grd-points button:nth-child(2n){
+                transform: scale(0.9);
+            }
+            .grd-points button:nth-child(3){
+                transform: scale(0.8);
+            }
+            .grd-points button:hover {
+                opacity: 1;
+            }
+            .grd-points button:active {
+                opacity: 1;
+                box-shadow: none;
+            }
+   
+            .pp > div {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .yesorno {
+                display: flex;
+                text-align: center;
+            }
+            .yesorno > button{
+                border : 0;
+                border-radius: 50%;
+                text-align: center;
+                width: 100px;
+                height: 100px;
+                line-height: 100px;
+                background-color: rgb(42, 78, 255);
+                box-shadow: 1px 2px 3px #333;
+                font-size: 22px;
+                color : white;
+                opacity: 0.9;
+                cursor: pointer;
+                margin : 0 auto;
+            }
+
+            #rightPannel {
+                position: absolute;
+                top : 10px;
+                right : 10px;
+                width: 150px;
+                background-color: rgba(0, 0, 0, 0.5);
+                padding : 10px;
+                text-align: center;
+            }
+            #rightPannel * {
+                color : white;
+                font-size: 13px;
+            }
+            #rightPannel > div {
+                display: flex;
+            }
+            #rightPannel > div > span {
+                display: inline-block;
+                flex : 1;
+                padding : 10px;
+            }
+            .top {
+                position: absolute;
+                top : 0;
+                left : 50%;
+                transform: translate(-50%, calc(-100% - 30px));
+                width : 500px;
+                display: flex;
+            }
+            .top > div {
+                flex : 1;
+            }
+            .top > div > span > span { padding : 10px; }
+            .top > div > span > span:nth-child(2){ font-weight: bolder; font-size: 28px; }
+
+        </style>
+
+        <script>
+
+            
+
+            // 0 : ai, 1 : h
+            const defaultRule = [
+                { input: [1, 0, 0, 1, 0, 0], output: [0, 0, 1] },
+                { input: [0, 1, 0, 0, 1, 0], output: [0, 0, 1] },
+                { input: [0, 0, 1, 0, 0, 1], output: [0, 0, 1] },
+
+                { input: [1, 0, 0, 0, 1, 0], output: [0, 1, 0] },
+                { input: [1, 0, 0, 0, 0, 1], output: [1, 0, 0] },
+
+                { input: [0, 1, 0, 1, 0, 0], output: [1, 0, 0] },
+                { input: [0, 1, 0, 0, 0, 1], output: [0, 1, 0] },
+
+                { input: [0, 0, 1, 1, 0, 0], output: [0, 1, 0] },
+                { input: [0, 0, 1, 0, 1, 0], output: [1, 0, 0] },
+            ];
+
+
+            const normalize = (max, min, x) => { return (x - min) / (max - min); }
+
+            // 가위바위보 - 선택
+            const HumanChoose = (_result) => {
+                console.log(_result);
+            }
+
+            // Ai Thinking Next Card
+            window.gameData = {
+                round : 0, aiScore : 0, humanScore : 0, winner : -1,
+                time : 0, trickCount : 0,
+            }
+            let decision;
+            const AiThinking = () => {
+                decision = [1,0,0, 0,1,0];
+                prg.SetDecision(decision);
+            }
+
+
+
+            // Ai State Check Ready
+            const CheckAiReady = () => {
+                // aiReady
+            }
+
+
+            // Check Human React
+            let alive = 0;
+            const CheckHumanReact = () => { document.body.addEventListener('mousemove', function(){ alive = 0; }); };
+
+            const AiBreathe = () => {
+                alive++;
+                const thinking = ai.GetAiThinking(alive, window);
+                if(!thinking) return;
+                console.log(thinking);
+            }
+
+
+            let ai;
+            let personality;
+            let prg;
+            window.onload = function(){
+
+
+                // Ask
+                personality = new RxPersonalityIndicator();
+                const msg = `
+                    안녕하세요. 전 지금 바로 태어났습니다. 가위바위보 게임을 하기 위해서 말이죠.
+                    저와 플레이하실 당신에 대해 이해하기 위해 제가 MBTI 질문들을 준비했는데,
+                    가끔씩 물어봐도 될까요?
+                `;
+                personality.AskProceedings(msg, personality.GetRandomAsk);
+                
+
+                ai = new RxState({
+                    target : document.getElementById('state'),
+                    defaultRule : defaultRule,
+                    personality : personality,
+                });
+                ai.visualizeOnOff(true);
+
+
+
+                prg = new RxRockPaperScissors({
+                    target : document.getElementById('targetDom'),
+                    HumanChoose : HumanChoose,
+                });
+
+
+                CheckHumanReact();
+
+                const breathe = setInterval(function(){
+                    AiBreathe();
+                }, 1000/30);
+
+            }
+
+        </script>
+
+    </head>
+    <body>
+
+        <h1> 가위 바위 보 </h1>
+        <div class="pp">
+            <h3>AI 상태</h3>
+            <div id="state">
+            </div>
+        </div>
+
+        <div id="rightPannel">
+            <div><span>준비 상태</span></div>
+            <div><span>AI</span><span id="aiReady">1</span></div>
+            <!-- <div><span>사람</span><span>2</span></div> -->
+        </div>
+
+        <div id="targetDom">
+        </div>
+
+
+<!-- 
+        <div class="explain">
+            <h1> Rx Means Algorithm</h1>
+            <p> * 해당 연도 말까지 테스트 가능합니다.</p>
+    
+            <div>
+                <span>
+                    <span>포인트 생성 개수 설정</span>&nbsp;
+                    <span><input type='text' id="inputNum" value="100" /></span>
+                </span>
+            </div>
+    
+    
+            <div>
+                <button onclick="clickToRandDate()">랜덤 데이터 뽑기</button>
+                <button onclick="clickToClustering()">분류하기</button>
+                <button onclick="clickToClear()">Clear</button>
+            </div>
+    
+            <div>
+                <p> 
+                    [ 클라우드 Rx (<a href='https://rxapis.com'>https://rxapis.com</a>) ]에서 제공합니다.
+                </p>
+                <h3>특징</h3>
+                <p> * 다중 차원 좌표값 클러스터링</p>
+                <p> * 유클리드 거리 측정법 사용</p>
+                <p> * 라벨별 사용 용이</p>
+            </div>
+        </div> -->
+
+
+
+
+
+    </body>
+</html>
