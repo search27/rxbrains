@@ -7,6 +7,7 @@ rxbrains with brain.js - Neural Network
 ## Table of Contents
 - [Rx Brain Node](#rx-brain-node)
   - [Rx Brain Node 설명](#rx-brain-node-설명)
+  - [Rx Brain Node Example](#rx-brain-node-예시)
 - [Rx Means Algorithm](#rx-means-algorithm)
   - [Rx Means Algorithm 설명](#rx-means-algorithm-설명)
 - [Rx Html Grid Searcher](#rx-html-grid-searcher)
@@ -69,6 +70,11 @@ const netNode = new RxFramework.RxBrainNodeC(emotions);
 * `brain.recurrent.GRUTimeStep : X`
 * `brain.recurrent.LSTMTimeStep : X`
 
+
+### 예시
+#### Rx Brain Node Example
+* RX 가위바위보 게임
+<img width="1659" alt="스크린샷 2024-09-01 오전 9 19 51" src="https://github.com/user-attachments/assets/93cb4423-51d7-4742-979d-7c2a714d4c1e" />
 
 
 
