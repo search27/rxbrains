@@ -23,7 +23,6 @@ rxbrains with brain.js - Neural Network
     + [--](#--)
       - [Rx Html Grid Searcher 설명](#rx-html-grid-searcher---)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 
 ## Rx Brain Node
