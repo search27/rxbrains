@@ -81,6 +81,9 @@ const netNode = new RxFramework.RxBrainNodeC(emotions);
 ## Rx Means Algorithm
 * 해당 연도 말까지 테스트 가능합니다.
 
+<img width="1659" alt="스크린샷 2024-09-01 오후 12 30 38" src="https://github.com/user-attachments/assets/42900839-771a-4057-8fc5-08ca98756597">
+<img width="1659" alt="스크린샷 2024-09-01 오후 12 30 27" src="https://github.com/user-attachments/assets/60303f0a-8cc4-4b7c-ab57-39e0c11eff83">
+
 ```javascript
 
 const rx = new RxFramework.RxMeansAL();
