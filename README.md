@@ -7,7 +7,7 @@ rxbrains with brain.js - Neural Network
 ## Table of Contents
 - [Rx Brain Node](#rx-brain-node)
   - [Rx Brain Node 설명](#rx-brain-node-설명)
-  - [Rx Brain Node 예시](#rx-brain-node-ex-예시)
+  - [Rx Brain Node 예시](#Rx-Brain-Node-예시)
 - [Rx Means Algorithm](#rx-means-algorithm)
   - [Rx Means Algorithm 설명](#rx-means-algorithm-설명)
 - [Rx Html Grid Searcher](#rx-html-grid-searcher)
