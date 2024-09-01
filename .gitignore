@@ -6,6 +6,5 @@ package-lock.json
 .gitignore
 
 
-samples/RxRockPaperScissors/*.js
 
 .DS_Store
