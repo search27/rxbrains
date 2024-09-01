@@ -6,23 +6,13 @@ rxbrains with brain.js - Neural Network
 
 ## Table of Contents
 - [Rx Brain Node](#rx-brain-node)
-  * [특징](#--)
-  * [사용법](#---)
-    + [Rx Brain Node 설명](#rx-brain-node---)
-  * [Rx Brain Node가 지원하는 brain.js Neural Network](#rx-brain-node-------brainjs-neural-network)
-  * [예시](#--)
-    + [Rx Brain Node 예시](#rx-brain-node---)
-      - [RX 가위바위보 게임](#rx---------)
+  - [Rx Brain Node 설명](#rx-brain-node-설명)
+  - [Rx Brain Node 예시](#Rx-Brain-Node-예시)
+    - [RX 가위바위보 게임](#RX-가위바위보-게임)
 - [Rx Means Algorithm](#rx-means-algorithm)
-  * [특징](#---1)
-  * [사용법](#----1)
-    + [Rx Means Algorithm 설명](#rx-means-algorithm---)
+  - [Rx Means Algorithm 설명](#rx-means-algorithm-설명)
 - [Rx Html Grid Searcher](#rx-html-grid-searcher)
-  * [--](#--)
-    + [Rx Html Grid Searcher 설명](#rx-html-grid-searcher---)
-
-
-
+  - [Rx Html Grid Searcher 설명](#rx-html-grid-searcher-설명)
 
 ## Rx Brain Node
 Rx Brain Node는 brain.js (<a href='https://brain.js.org/'>https://brain.js.org/</a>)의 동적 사용에 관한 라이브러리 입니다.    
